@@ -717,6 +717,23 @@
                         "minimum": 1024,
                         "type": "integer"
                       },
+                      "shutdownGracePeriodCriticalPodsSeconds": {
+                        "description": "ShutdownGracePeriodCriticalPodsSeconds is the maximum allowed grace period\n(in seconds) that is used to terminate critical pods during a node shutdown.\nThis value should be <= ShutdownGracePeriodSeconds, and is only valid if ShutdownGracePeriodSeconds is set.",
+                        "format": "int32",
+                        "maximum": 120,
+                        "minimum": 0,
+                        "type": "integer"
+                      },
+                      "shutdownGracePeriodSeconds": {
+                        "description": "ShutdownGracePeriodSeconds is the maximum allowed grace period\n(in seconds) that the node should delay the shutdown during a graceful shutdown.",
+                        "enum": [
+                          0,
+                          30,
+                          120
+                        ],
+                        "format": "int32",
+                        "type": "integer"
+                      },
                       "singleProcessOOMKill": {
                         "description": "This setting sets whether to enable single process OOM killer.\nIf set to true, the processes in a container will be OOM killed individually instead of as a group.",
                         "type": "boolean"
@@ -731,6 +748,10 @@
                       {
                         "message": "ImageGcHighThresholdPercent must be higher than 80 which is default value of imageGcLowThresholdPercent",
                         "rule": "has(self.imageGcHighThresholdPercent)&&!has(self.imageGcLowThresholdPercent) ? self.imageGcHighThresholdPercent>80 : true"
+                      },
+                      {
+                        "message": "ShutdownGracePeriodCriticalPodsSeconds must be less than or equal to ShutdownGracePeriodSeconds and requires ShutdownGracePeriodSeconds to be set",
+                        "rule": "!has(self.shutdownGracePeriodCriticalPodsSeconds) || (has(self.shutdownGracePeriodSeconds) && self.shutdownGracePeriodCriticalPodsSeconds <= self.shutdownGracePeriodSeconds)"
                       }
                     ],
                     "additionalProperties": false
@@ -1721,6 +1742,23 @@
                       "minimum": 1024,
                       "type": "integer"
                     },
+                    "shutdownGracePeriodCriticalPodsSeconds": {
+                      "description": "ShutdownGracePeriodCriticalPodsSeconds is the maximum allowed grace period\n(in seconds) that is used to terminate critical pods during a node shutdown.\nThis value should be <= ShutdownGracePeriodSeconds, and is only valid if ShutdownGracePeriodSeconds is set.",
+                      "format": "int32",
+                      "maximum": 120,
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "shutdownGracePeriodSeconds": {
+                      "description": "ShutdownGracePeriodSeconds is the maximum allowed grace period\n(in seconds) that the node should delay the shutdown during a graceful shutdown.",
+                      "enum": [
+                        0,
+                        30,
+                        120
+                      ],
+                      "format": "int32",
+                      "type": "integer"
+                    },
                     "singleProcessOOMKill": {
                       "description": "This setting sets whether to enable single process OOM killer.\nIf set to true, the processes in a container will be OOM killed individually instead of as a group.",
                       "type": "boolean"
@@ -1735,6 +1773,10 @@
                     {
                       "message": "ImageGcHighThresholdPercent must be higher than 80 which is default value of imageGcLowThresholdPercent",
                       "rule": "has(self.imageGcHighThresholdPercent)&&!has(self.imageGcLowThresholdPercent) ? self.imageGcHighThresholdPercent>80 : true"
+                    },
+                    {
+                      "message": "ShutdownGracePeriodCriticalPodsSeconds must be less than or equal to ShutdownGracePeriodSeconds and requires ShutdownGracePeriodSeconds to be set",
+                      "rule": "!has(self.shutdownGracePeriodCriticalPodsSeconds) || (has(self.shutdownGracePeriodSeconds) && self.shutdownGracePeriodCriticalPodsSeconds <= self.shutdownGracePeriodSeconds)"
                     }
                   ],
                   "additionalProperties": false
